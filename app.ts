@@ -1,4 +1,5 @@
 import express, { type Request, type Response } from "express";
+import log, { LogLevel } from './log.ts';
 import { prompt } from './prompt.ts';
 
 const app = express();
@@ -85,5 +86,5 @@ app.get("/health", (req, res) => res.sendStatus(200));
 const port: number = parseInt(process.env.PORT || "3000", 10);
 
 app.listen(port, (): void => {
-  console.log(`Server running on port ${port}`);
+  log(LogLevel.INFO, `Server running on port ${port}`);
 });

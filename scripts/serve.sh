@@ -1,2 +1,4 @@
 #!/usr/bin/env bash
-node --no-warnings app.ts
+node --no-warnings \
+  --experimental-transform-types \
+  app.ts
