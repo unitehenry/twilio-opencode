@@ -13,6 +13,18 @@ function buildResponse(message: string): string {
   `;
 }
 
+function hangup(res: Response): void {
+  const responseXml = `<?xml version="1.0" encoding="UTF-8"?>
+      <Response>
+        <Hangup />
+      </Response>
+    `;
+
+  res.set("Content-Type", "text/xml");
+
+  res.send(responseXml);
+}
+
 export default async (req: Request, res: Response): Promise<void> => {
   const app = req.app;
 
@@ -24,6 +36,8 @@ export default async (req: Request, res: Response): Promise<void> => {
 
   if (!whitelist(from)) {
     log("WARN", "Phone number not whitelisted", { callId, from });
+
+    hangup(res);
 
     return;
   }
