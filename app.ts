@@ -86,5 +86,5 @@ app.get("/health", (req, res) => res.sendStatus(200));
 const port: number = parseInt(process.env.PORT || "3000", 10);
 
 app.listen(port, (): void => {
-  log('INFO', `Server running on port ${port}`);
+  log("INFO", `Server running on port ${port}`);
 });

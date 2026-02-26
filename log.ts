@@ -1,7 +1,4 @@
-type LogLevel =
-  |'INFO'
-  |'WARN'
-  |'ERROR';
+type LogLevel = "INFO" | "WARN" | "ERROR";
 
 export default function log(
   level: LogLevel,
