@@ -1,5 +1,5 @@
 import { type Request, type Response } from "express";
-import whitelist from "./whitelist";
+import whitelist from "./whitelist.ts";
 import prompt from "./prompt.ts";
 import log from "./log.ts";
 
