@@ -7,11 +7,11 @@ interface PromptResult {
 }
 
 interface PromptParams {
-  message: string,
-  sessionId?: string
+  message: string;
+  sessionId?: string;
 }
 
-export default async (params : PromptParams): Promise<PromptResult> => {
+export default async (params: PromptParams): Promise<PromptResult> => {
   const baseUrl = "http://127.0.0.1:36967";
 
   const { message, sessionId } = params;
@@ -46,4 +46,4 @@ export default async (params : PromptParams): Promise<PromptResult> => {
     .reduce((response: string, part) => response + " " + part.text, "");
 
   return { sessionId: id, text };
-}
+};

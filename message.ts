@@ -1,6 +1,6 @@
 import { type Request, type Response } from "express";
-import prompt from './prompt.ts';
-import log from './log.ts';
+import prompt from "./prompt.ts";
+import log from "./log.ts";
 
 function buildResponse(message: string): string {
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -32,4 +32,4 @@ export default async (req: Request, res: Response): Promise<void> => {
   res.set("Content-Type", "text/xml");
 
   res.send(message);
-}
+};
