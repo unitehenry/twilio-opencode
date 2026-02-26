@@ -1,5 +1,5 @@
-import { createOpencodeClient } from "@opencode-ai/sdk"
-import express, { Request, Response } from 'express';
+import { createOpencodeClient } from "@opencode-ai/sdk";
+import express, { Request, Response } from "express";
 
 const app = express();
 
@@ -10,11 +10,14 @@ interface PromptResult {
   text: string;
 }
 
-async function prompt(message: string, sessionId: string | null): Promise<PromptResult> {
+async function prompt(
+  message: string,
+  sessionId: string | null,
+): Promise<PromptResult> {
   console.log(`Session ID Param: ${sessionId}`);
 
   const client = createOpencodeClient({
-    baseUrl: 'http://127.0.0.1:36967',
+    baseUrl: "http://127.0.0.1:36967",
   });
 
   const id: string = await (async (): Promise<string> => {
@@ -32,19 +35,19 @@ async function prompt(message: string, sessionId: string | null): Promise<Prompt
   const result = await client.session.prompt({
     path: { id },
     body: {
-      parts: [{type: "text", text: message }]
-    }
+      parts: [{ type: "text", text: message }],
+    },
   });
 
   const text: string = result.data.parts
-    .filter(part => part.type === 'text')
-    .reduce((response: string, part) => response + ' ' + part.text, '');
+    .filter((part) => part.type === "text")
+    .reduce((response: string, part) => response + " " + part.text, "");
 
   return { sessionId: id, text };
 }
 
 function agentResponse(res: Response, message: string): void {
-  res.set('Content-Type', 'text/xml');
+  res.set("Content-Type", "text/xml");
 
   res.send(`<?xml version="1.0" encoding="UTF-8"?>
     <Response>
@@ -56,7 +59,7 @@ function agentResponse(res: Response, message: string): void {
 }
 
 function smsResponse(res: Response, message: string): void {
-  res.set('Content-Type', 'text/xml');
+  res.set("Content-Type", "text/xml");
 
   res.send(`<?xml version="1.0" encoding="UTF-8"?>
     <Response>
@@ -68,12 +71,14 @@ function smsResponse(res: Response, message: string): void {
 }
 
 function hangup(res: Response): void {
-  res.set('Content-Type', 'text/xml');
+  res.set("Content-Type", "text/xml");
 
-  res.send('<?xml version="1.0" encoding="UTF-8"?><Response><Hangup/></Response>');
+  res.send(
+    '<?xml version="1.0" encoding="UTF-8"?><Response><Hangup/></Response>',
+  );
 }
 
-app.post('/voice', async (req: Request, res: Response): Promise<void> => {
+app.post("/voice", async (req: Request, res: Response): Promise<void> => {
   const callId: string = req.body.CallSid;
 
   console.log(`Call ID: ${callId}`);
@@ -81,9 +86,12 @@ app.post('/voice', async (req: Request, res: Response): Promise<void> => {
   const speechResult: string = req.body.SpeechResult;
 
   if (speechResult) {
-    console.log('User message:', speechResult);
+    console.log("User message:", speechResult);
 
-    const { sessionId, text } = await prompt(speechResult, app.get(callId) as string | null);
+    const { sessionId, text } = await prompt(
+      speechResult,
+      app.get(callId) as string | null,
+    );
 
     app.set(callId, sessionId);
 
@@ -91,11 +99,11 @@ app.post('/voice', async (req: Request, res: Response): Promise<void> => {
 
     agentResponse(res, text);
   } else {
-    agentResponse(res, 'Please say something.');
+    agentResponse(res, "Please say something.");
   }
 });
 
-app.post('/message', async (req: Request, res: Response): Promise<void> => {
+app.post("/message", async (req: Request, res: Response): Promise<void> => {
   const messageId: string = req.body.MessageSid;
 
   console.log(`Message ID: ${messageId}`);
@@ -104,7 +112,7 @@ app.post('/message', async (req: Request, res: Response): Promise<void> => {
 
   if (!messageResult) return;
 
-  console.log('User message:', messageResult);
+  console.log("User message:", messageResult);
 
   const { text } = await prompt(messageResult, null);
 
@@ -113,9 +121,9 @@ app.post('/message', async (req: Request, res: Response): Promise<void> => {
   smsResponse(res, text);
 });
 
-app.get('/health', (req, res) => res.sendStatus(200));
+app.get("/health", (req, res) => res.sendStatus(200));
 
-const port: number = parseInt(process.env.PORT || '3000', 10);
+const port: number = parseInt(process.env.PORT || "3000", 10);
 
 app.listen(port, (): void => {
   console.log(`Server running on port ${port}`);
