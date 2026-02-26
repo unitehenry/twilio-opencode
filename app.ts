@@ -41,21 +41,23 @@ function hangup(res: Response): void {
 app.post("/voice", async (req: Request, res: Response): Promise<void> => {
   const callId: string = req.body.CallSid;
 
-  console.log(`Call ID: ${callId}`);
+  log("INFO", `Call webhook received`, { callId });
 
   const speechResult: string = req.body.SpeechResult;
 
   if (speechResult) {
-    console.log("User message:", speechResult);
+    log("INFO", "Caller message received", { callId, speechResult });
 
     const { sessionId, text } = await prompt(
       speechResult,
       app.get(callId) as string | null,
     );
 
+    log("INFO", "Agent responded", { callId, sessionId, text });
+
     app.set(callId, sessionId);
 
-    console.log(text);
+    log("INFO", "Session cached", { callId, sessionId });
 
     agentResponse(res, text);
   } else {
@@ -66,17 +68,17 @@ app.post("/voice", async (req: Request, res: Response): Promise<void> => {
 app.post("/message", async (req: Request, res: Response): Promise<void> => {
   const messageId: string = req.body.MessageSid;
 
-  console.log(`Message ID: ${messageId}`);
+  log("INFO", `Message webhook received`, { messageId });
 
   const messageResult: string = req.body.Body;
 
   if (!messageResult) return;
 
-  console.log("User message:", messageResult);
+  log("INFO", "User message received", {messageResult});
 
-  const { text } = await prompt(messageResult, null);
+  const { sessionId, text } = await prompt(messageResult, null);
 
-  console.log(text);
+  log("INFO", "Agent responded", { sessionId, text });
 
   smsResponse(res, text);
 });
@@ -85,6 +87,4 @@ app.get("/health", (req, res) => res.sendStatus(200));
 
 const port: number = parseInt(process.env.PORT || "3000", 10);
 
-app.listen(port, (): void => {
-  log("INFO", `Server running on port ${port}`);
-});
+app.listen(port, (): void => log("INFO", `Server running on port ${port}`));

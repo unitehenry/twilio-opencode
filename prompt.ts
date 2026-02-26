@@ -1,4 +1,5 @@
 import { createOpencodeClient } from "@opencode-ai/sdk";
+import log from "./log.ts";
 
 interface PromptResult {
   sessionId: string;
@@ -9,7 +10,7 @@ export async function prompt(
   message: string,
   sessionId: string | null,
 ): Promise<PromptResult> {
-  console.log(`Session ID Param: ${sessionId}`);
+  log("INFO", `Session ID Param: ${sessionId}`);
 
   const client = createOpencodeClient({
     baseUrl: "http://127.0.0.1:36967",
@@ -25,7 +26,7 @@ export async function prompt(
     return sessionResult.data.id;
   })();
 
-  console.log(`Session ID: ${id}`);
+  log("INFO", `Session ID: ${id}`);
 
   const result = await client.session.prompt({
     path: { id },
