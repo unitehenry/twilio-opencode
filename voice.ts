@@ -48,7 +48,7 @@ export default async (req: Request, res: Response): Promise<void> => {
 
   log("INFO", "Session cached", { callId, sessionId });
 
-  const response = buildResponse("Please say something.");
+  const response = buildResponse(text);
 
   res.set("Content-Type", "text/xml");
 
