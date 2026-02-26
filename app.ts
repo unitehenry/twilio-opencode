@@ -19,4 +19,22 @@ app.get("/health", health);
 
 const port: number = parseInt(process.env.PORT || "3000", 10);
 
-app.listen(port, (): void => log("INFO", "Server started", { port }));
+const server = app.listen(port, (): void =>
+  log("INFO", "Server started", { port }),
+);
+
+process.on("SIGINT", () => {
+  log("INFO", "Received SIGINT, shutting down gracefully");
+  server.close(() => {
+    log("INFO", "Server closed");
+    process.exit(0);
+  });
+});
+
+process.on("SIGTERM", () => {
+  log("INFO", "Received SIGTERM, shutting down gracefully");
+  server.close(() => {
+    log("INFO", "Server closed");
+    process.exit(0);
+  });
+});
