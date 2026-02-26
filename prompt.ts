@@ -6,11 +6,15 @@ interface PromptResult {
   text: string;
 }
 
-export async function prompt(
+interface PromptParams {
   message: string,
-  sessionId: string | null,
-): Promise<PromptResult> {
+  sessionId?: string
+}
+
+export default async (params : PromptParams): Promise<PromptResult> => {
   const baseUrl = "http://127.0.0.1:36967";
+
+  const { message, sessionId } = params;
 
   log("INFO", "Prompting agent", { sessionId, baseUrl, message });
 

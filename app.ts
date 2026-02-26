@@ -1,9 +1,8 @@
-import express, { type Request, type Response } from "express";
+import express from 'express';
 import log from "./log.ts";
 import message from './message.ts';
 import voice from './voice.ts';
 import health from './health.ts';
-import { prompt } from "./prompt.ts";
 
 const app = express();
 

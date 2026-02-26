@@ -1,5 +1,5 @@
 import { type Request, type Response } from "express";
-import { prompt } from './prompt.ts';
+import prompt from './prompt.ts';
 import log from './log.ts';
 
 function buildResponse(message : string) : string {
@@ -35,10 +35,10 @@ export default async (req: Request, res: Response): Promise<void> => {
 
   log("INFO", "Caller message received", { callId, speechResult });
 
-  const { sessionId, text } = await prompt(
-    speechResult,
-    app.get(callId) as string | null,
-  );
+  const { sessionId, text } = await prompt({
+    message: speechResult,
+    sessionId: app.get(callId) as string | null,
+  });
 
   log("INFO", "Agent responded", { callId, sessionId, text });
 
