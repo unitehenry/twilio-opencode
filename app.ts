@@ -74,7 +74,7 @@ app.post("/message", async (req: Request, res: Response): Promise<void> => {
 
   if (!messageResult) return;
 
-  log("INFO", "User message received", {messageResult});
+  log("INFO", "User message received", { messageResult });
 
   const { sessionId, text } = await prompt(messageResult, null);
 
