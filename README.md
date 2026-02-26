@@ -8,6 +8,14 @@ A lightweight express server to handle twilio voice and messaging webhooks for p
 2. [Start the twilio opencode server](#start-server)
 3. [Configure twilio](#configure-twilio)
 
+## Environment variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `OPENCODE_BASE_URL` | Base URL for the opencode server to connect to | None |
+| `PORT` | Port on which the express server listens | 3000 |
+| `FROM_WHITELIST` | Comma-separated list of whitelisted phone numbers for incoming requests (Ex: `+1234567891,+134567892`) | None |
+
 ### Start server
 
 ```bash
