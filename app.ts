@@ -9,7 +9,7 @@ const app = express();
 
 const validate = !!process.env.TWILIO_AUTH_TOKEN;
 
-app.set('trust proxy', true);
+app.set("trust proxy", true);
 
 app.use(express.urlencoded({ extended: false }));
 
