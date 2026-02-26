@@ -12,7 +12,7 @@ export async function prompt(
 ): Promise<PromptResult> {
   const baseUrl = "http://127.0.0.1:36967";
 
-  log("INFO", 'Prompting agent', { sessionId, baseUrl, message });
+  log("INFO", "Prompting agent", { sessionId, baseUrl, message });
 
   const client = createOpencodeClient({ baseUrl });
 
@@ -21,14 +21,14 @@ export async function prompt(
       return sessionId;
     }
 
-    log('INFO', 'Creating opencode session');
+    log("INFO", "Creating opencode session");
 
     const sessionResult = await client.session.create();
 
     return sessionResult.data.id;
   })();
 
-  log("INFO", 'Session connected', { sessionId: id });
+  log("INFO", "Session connected", { sessionId: id });
 
   const result = await client.session.prompt({
     path: { id },
