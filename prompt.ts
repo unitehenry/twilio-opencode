@@ -12,7 +12,7 @@ interface PromptParams {
 }
 
 export default async (params: PromptParams): Promise<PromptResult> => {
-  const baseUrl = "http://127.0.0.1:36967";
+  const baseUrl = process.env.OPENCODE_BASE_URL || undefined;
 
   const { message, sessionId } = params;
 
