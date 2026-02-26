@@ -1,1 +1,5 @@
-export default async (req: Request, res: Response): Promise<void> => res.sendStatus(200);
+import { type Request, type Response } from 'express';
+
+export default async (req: Request, res: Response): Promise<void> => {
+  res.sendStatus(200);
+}
