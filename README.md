@@ -1,6 +1,6 @@
 # Twilio Opencode
 
-A lightweight express server to handle twilio voice and messaging webhooks and prompt opencode.
+A lightweight express server to handle twilio voice and messaging webhooks for prompting opencode.
 
 ## Usage
 
