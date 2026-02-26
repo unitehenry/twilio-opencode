@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
-npm install express \
+npm install typescript \
+  express \
   @types/express \
   @opencode-ai/sdk
