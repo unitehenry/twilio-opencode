@@ -1,5 +1,6 @@
 import express, { type Request, type Response } from "express";
 import log from "./log.ts";
+import message from './message.ts';
 import { prompt } from "./prompt.ts";
 
 const app = express();
@@ -65,23 +66,7 @@ app.post("/voice", async (req: Request, res: Response): Promise<void> => {
   }
 });
 
-app.post("/message", async (req: Request, res: Response): Promise<void> => {
-  const messageId: string = req.body.MessageSid;
-
-  log("INFO", `Message webhook received`, { messageId });
-
-  const messageResult: string = req.body.Body;
-
-  if (!messageResult) return;
-
-  log("INFO", "User message received", { messageResult });
-
-  const { sessionId, text } = await prompt(messageResult, null);
-
-  log("INFO", "Agent responded", { sessionId, text });
-
-  smsResponse(res, text);
-});
+app.post("/message", message);
 
 app.get("/health", (req, res) => res.sendStatus(200));
 
