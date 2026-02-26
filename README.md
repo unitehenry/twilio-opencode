@@ -4,7 +4,7 @@ A lightweight express server to handle twilio voice and messaging webhooks and p
 
 ## Usage
 
-1. Start an opencode server
+1. [Start an opencode server](https://opencode.ai/docs/server/)
 2. [Start the twilio opencode server](#start-server)
 
 ### Start server
