@@ -17,7 +17,9 @@ export default async (req: Request, res: Response): Promise<void> => {
 
   const callId: string = req.body.CallSid;
 
-  log("INFO", `Call webhook received`, { callId });
+  const from: string = req.body.From;
+
+  log("INFO", `Call webhook received`, { callId, from });
 
   const speechResult: string = req.body.SpeechResult;
 

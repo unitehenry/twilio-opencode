@@ -1,10 +1,10 @@
 type LogLevel = "INFO" | "WARN" | "ERROR";
 
-export default function log(
+export default (
   level: LogLevel,
   message: string,
   data: Record<string, any> = {},
-): void {
+): void => {
   const time = new Date().toISOString();
 
   const entry = {
