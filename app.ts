@@ -1,6 +1,6 @@
 import express, { type Request, type Response } from "express";
-import log, { LogLevel } from './log.ts';
-import { prompt } from './prompt.ts';
+import log, { LogLevel } from "./log.ts";
+import { prompt } from "./prompt.ts";
 
 const app = express();
 

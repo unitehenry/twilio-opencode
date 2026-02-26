@@ -1,10 +1,14 @@
 export enum LogLevel {
-  'INFO',
-  'WARN',
-  'ERROR'
+  "INFO",
+  "WARN",
+  "ERROR",
 }
 
-export default function log(level : LogLevel, message : string, data : Record<string, any> = {}) : void {
+export default function log(
+  level: LogLevel,
+  message: string,
+  data: Record<string, any> = {},
+): void {
   const time = new Date().toISOString();
 
   const entry = {
@@ -14,5 +18,5 @@ export default function log(level : LogLevel, message : string, data : Record<st
     ...data,
   };
 
-  process.stdout.write(JSON.stringify(entry) + '\n');
+  process.stdout.write(JSON.stringify(entry) + "\n");
 }
