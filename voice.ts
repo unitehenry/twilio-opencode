@@ -1,6 +1,6 @@
 import { type Request, type Response } from "express";
 import prompt from "./prompt.ts";
-import whitelist from './whitelist.ts';
+import whitelist from "./whitelist.ts";
 import log from "./log.ts";
 
 function buildResponse(message: string): string {
@@ -23,7 +23,7 @@ export default async (req: Request, res: Response): Promise<void> => {
   log("INFO", `Call webhook received`, { callId, from });
 
   if (!whitelist(from)) {
-    log('WARN', 'Phone number not whitelisted', { callId, from });
+    log("WARN", "Phone number not whitelisted", { callId, from });
 
     return;
   }

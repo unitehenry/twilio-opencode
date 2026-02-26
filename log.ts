@@ -15,4 +15,4 @@ export default (
   };
 
   process.stdout.write(JSON.stringify(entry) + "\n");
-}
+};
