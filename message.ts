@@ -80,7 +80,7 @@ export default async (req: Request, res: Response): Promise<void> => {
   const sendMessageParams = {
     twilioAccountSid,
     twilioAuthToken,
-    fromNumber: req.body.to,
+    fromNumber: req.body.To,
     toNumber: from,
     message: text,
   };
