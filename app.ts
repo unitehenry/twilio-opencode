@@ -1,5 +1,5 @@
 import { createOpencodeClient } from "@opencode-ai/sdk";
-import express, { Request, Response } from "express";
+import express, { type Request, type Response } from "express";
 
 const app = express();
 
