@@ -11,8 +11,8 @@ interface PromptParams {
   sessionId?: string;
 }
 
-function logPart(part : Part) : Part {
-  log('INFO', 'Agent part', { part });
+function logPart(part: Part): Part {
+  log("INFO", "Agent part", { part });
   return part;
 }
 
