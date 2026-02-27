@@ -6,7 +6,7 @@ import log from "./log.ts";
 function buildResponse(message: string): string {
   return `<?xml version="1.0" encoding="UTF-8"?>
     <Response>
-      <Gather input="speech" action="/" method="POST">
+      <Gather input="speech" action="/voice" method="POST">
         <Say>${message}</Say>
       </Gather>
     </Response>
