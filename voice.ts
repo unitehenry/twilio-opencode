@@ -1,4 +1,5 @@
 import { type Request, type Response } from "express";
+import twilio from "twilio";
 import prompt from "./prompt.ts";
 import whitelist from "./whitelist.ts";
 import log from "./log.ts";
@@ -26,17 +27,31 @@ function hangup(res: Response, message: string = ""): void {
   res.send(responseXml);
 }
 
+function hold(res: Response): void {
+  const responseXml = `<?xml version="1.0" encoding="UTF-8"?>
+    <Response>
+      <Say>Let me work on that for you...</Say>
+      <Play loop="0">
+        http://com.twilio.sounds.music.s3.amazonaws.com/MARKOVICHAMP-Borghestral.mp3
+      </Play>
+    </Response>`;
+
+  res.set("Content-Type", "text/xml");
+
+  res.send(responseXml);
+}
+
 export default async (req: Request, res: Response): Promise<void> => {
   const app = req.app;
 
-  const callId: string = req.body.CallSid;
+  const callSid: string = req.body.CallSid;
 
   const from: string = req.body.From;
 
-  log("INFO", `Call webhook received`, { callId, from });
+  log("INFO", `Call webhook received`, { callSid, from });
 
   if (!whitelist(from)) {
-    log("WARN", "Phone number not whitelisted", { callId, from });
+    log("WARN", "Phone number not whitelisted", { callSid, from });
 
     hangup(res);
 
@@ -57,22 +72,38 @@ export default async (req: Request, res: Response): Promise<void> => {
     return;
   }
 
-  log("INFO", "Caller message received", { callId, speechResult });
+  log("INFO", "Caller message received", { callSid, speechResult });
+
+  const twilioAuthToken: string | undefined = process.env.TWILIO_AUTH_TOKEN;
+
+  if (twilioAuthToken) {
+    hold(res);
+  }
 
   const { sessionId, text } = await prompt({
     message: speechResult,
-    sessionId: app.get(callId) as string | null,
+    sessionId: app.get(callSid) as string | null,
   });
 
-  log("INFO", "Agent responded", { callId, sessionId, text });
+  log("INFO", "Agent responded", { callSid, sessionId, text });
 
-  app.set(callId, sessionId);
+  app.set(callSid, sessionId);
 
-  log("INFO", "Session cached", { callId, sessionId });
+  log("INFO", "Session cached", { callSid, sessionId });
 
   const response = buildResponse(text);
 
-  res.set("Content-Type", "text/xml");
+  if (!twilioAuthToken) {
+    res.set("Content-Type", "text/xml");
 
-  res.send(response);
+    res.send(response);
+
+    return;
+  }
+
+  const accountSid: string = req.body.AccountSid;
+
+  const twilioClient = twilio(accountSid, twilioAuthToken);
+
+  twilioClient.calls(callSid).update({ twiml: response });
 };
