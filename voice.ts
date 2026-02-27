@@ -13,9 +13,10 @@ function buildResponse(message: string): string {
   `;
 }
 
-function hangup(res: Response): void {
+function hangup(res: Response, message : string = ''): void {
   const responseXml = `<?xml version="1.0" encoding="UTF-8"?>
       <Response>
+        <Say>${message}</Say>
         <Hangup />
       </Response>
     `;

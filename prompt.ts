@@ -1,4 +1,4 @@
-import { createOpencodeClient } from "@opencode-ai/sdk";
+import { createOpencodeClient, type Part } from "@opencode-ai/sdk";
 import log from "./log.ts";
 
 interface PromptResult {
@@ -9,6 +9,11 @@ interface PromptResult {
 interface PromptParams {
   message: string;
   sessionId?: string;
+}
+
+function logPart(part : Part) : Part {
+  log('INFO', 'Agent part', { part });
+  return part;
 }
 
 export default async (params: PromptParams): Promise<PromptResult> => {
@@ -42,6 +47,7 @@ export default async (params: PromptParams): Promise<PromptResult> => {
   });
 
   const text: string = result.data.parts
+    .map(logPart)
     .filter((part) => part.type === "text")
     .reduce((response: string, part) => response + " " + part.text, "");
 
