@@ -4,6 +4,9 @@ import prompt from "./prompt.ts";
 import whitelist from "./whitelist.ts";
 import log from "./log.ts";
 
+const HOLD_MUSIC_URL =
+  "http://com.twilio.sounds.music.s3.amazonaws.com/MARKOVICHAMP-Borghestral.mp3";
+
 function buildResponse(message: string): string {
   return `<?xml version="1.0" encoding="UTF-8"?>
     <Response>
@@ -31,9 +34,7 @@ function hold(res: Response): void {
   const responseXml = `<?xml version="1.0" encoding="UTF-8"?>
     <Response>
       <Say>Let me work on that for you...</Say>
-      <Play loop="0">
-        http://com.twilio.sounds.music.s3.amazonaws.com/MARKOVICHAMP-Borghestral.mp3
-      </Play>
+      <Play loop="0">${HOLD_MUSIC_URL}</Play>
     </Response>`;
 
   res.set("Content-Type", "text/xml");
@@ -63,7 +64,7 @@ export default async (req: Request, res: Response): Promise<void> => {
   if (!speechResult) {
     log("INFO", "No speech result received");
 
-    const response = buildResponse("Please say something.");
+    const response = buildResponse("What can I do for you?");
 
     res.set("Content-Type", "text/xml");
 
