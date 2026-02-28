@@ -65,7 +65,7 @@ export default async (req: Request, res: Response): Promise<void> => {
   if (!speechResult) {
     log("INFO", "No speech result received");
 
-    const response = buildResponse(req, 'Hello');
+    const response = buildResponse(req, "Hello");
 
     res.set("Content-Type", "text/xml");
 
