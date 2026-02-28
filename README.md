@@ -32,5 +32,5 @@ docker run twilio-opencode \
 ## Build an image
 
 ```bash
-sh scripts/build.sh
+scripts/build.sh
 ```
