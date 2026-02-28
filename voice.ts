@@ -9,7 +9,7 @@ const DEFAULT_GREETING = "Hello";
 const HOLD_MUSIC_URL =
   "http://com.twilio.sounds.music.s3.amazonaws.com/MARKOVICHAMP-Borghestral.mp3";
 
-function buildResponse(req: Request, message: string): string {
+function buildResponseXml(req: Request, message : string) : string {
   const origin = `${req.protocol}://${req.get("host")}`;
 
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -19,6 +19,14 @@ function buildResponse(req: Request, message: string): string {
       </Gather>
     </Response>
   `;
+}
+
+function respond(req: Request, res: Response, message: string): void {
+  const responseXml = buildResponseXml(req, message);
+
+  res.set("Content-Type", "text/xml");
+
+  res.send(responseXml);
 }
 
 function hangup(res: Response, message: string = ""): void {
@@ -45,19 +53,23 @@ function hold(res: Response): void {
   res.send(responseXml);
 }
 
-async function updateCall(
-  accountSid: string,
-  callSid: string,
-  twiml: string,
-): Promise<void> {
-  const twilioAuthToken: string | undefined = process.env.TWILIO_AUTH_TOKEN;
+interface UpdateCallParams {
+  request: Request;
+  accountSid: string;
+  callSid: string;
+  message: string;
+  twilioAuthToken: string;
+}
 
-  const twilioClient = twilio(accountSid, twilioAuthToken);
+async function updateCall(params : UpdateCallParams): Promise<void> {
+  const twilioClient = twilio(params.accountSid, params.twilioAuthToken);
+
+  const twiml = buildResponseXml(params.request, params.message);
 
   try {
-    log("INFO", "Updating twilio call", { callSid });
+    log("INFO", "Updating twilio call", { callSid: params.callSid });
 
-    await twilioClient.calls(callSid).update({ twiml });
+    await twilioClient.calls(params.callSid).update({ twiml });
   } catch (error) {
     log("ERROR", "Failed to update call", { error });
   }
@@ -85,11 +97,7 @@ export default async (req: Request, res: Response): Promise<void> => {
   if (!speechResult) {
     log("INFO", "No speech result received");
 
-    const response = buildResponse(req, DEFAULT_GREETING);
-
-    res.set("Content-Type", "text/xml");
-
-    res.send(response);
+    respond(req, res, DEFAULT_GREETING);
 
     return;
   }
@@ -113,14 +121,10 @@ export default async (req: Request, res: Response): Promise<void> => {
 
   log("INFO", "Session cached", { callSid, sessionId });
 
-  const response = buildResponse(req, text);
-
   if (!twilioAuthToken) {
     log("INFO", "No auth token, responding to webhook");
 
-    res.set("Content-Type", "text/xml");
-
-    res.send(response);
+    respond(req, res, text);
 
     return;
   }
@@ -129,5 +133,11 @@ export default async (req: Request, res: Response): Promise<void> => {
 
   log("INFO", "Creating twilio client", { accountSid });
 
-  await updateCall(accountSid, callSid, response);
+  await updateCall({
+    accountSid,
+    callSid,
+    twilioAuthToken,
+    request: req,
+    message: text
+  });
 };
