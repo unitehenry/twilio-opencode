@@ -4,6 +4,8 @@ import prompt from "./prompt.ts";
 import whitelist from "./whitelist.ts";
 import log from "./log.ts";
 
+const DEFAULT_GREETING = "Hello";
+
 const HOLD_MUSIC_URL =
   "http://com.twilio.sounds.music.s3.amazonaws.com/MARKOVICHAMP-Borghestral.mp3";
 
@@ -83,7 +85,7 @@ export default async (req: Request, res: Response): Promise<void> => {
   if (!speechResult) {
     log("INFO", "No speech result received");
 
-    const response = buildResponse(req, "Hello");
+    const response = buildResponse(req, DEFAULT_GREETING);
 
     res.set("Content-Type", "text/xml");
 
