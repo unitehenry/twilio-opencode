@@ -43,6 +43,20 @@ function hold(res: Response): void {
   res.send(responseXml);
 }
 
+async function updateCall(accountSid: string, callSid: string, twiml: string) : Promise<void> {
+  const twilioAuthToken: string | undefined = process.env.TWILIO_AUTH_TOKEN;
+
+  const twilioClient = twilio(accountSid, twilioAuthToken);
+
+  try {
+    log("INFO", "Updating twilio call", { callSid });
+
+    await twilioClient.calls(callSid).update({ twiml });
+  } catch(error) {
+    log('ERROR', 'Failed to update call', { error });
+  }
+}
+
 export default async (req: Request, res: Response): Promise<void> => {
   const app = req.app;
 
@@ -109,9 +123,5 @@ export default async (req: Request, res: Response): Promise<void> => {
 
   log("INFO", "Creating twilio client", { accountSid });
 
-  const twilioClient = twilio(accountSid, twilioAuthToken);
-
-  log("INFO", "Updating twilio call", { callSid });
-
-  await twilioClient.calls(callSid).update({ twiml: response });
+  await updateCall(accountSid, callSid, response);
 };
