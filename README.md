@@ -12,7 +12,7 @@ A lightweight express server to handle twilio voice and messaging webhooks for p
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `OPENCODE_BASE_URL` | Base URL for the opencode server to connect to. | None |
+| `OPENCODE_BASE_URL` | Base URL for the opencode client to connect to. | None |
 | `PORT` | Port on which the express server listens. | 3000 |
 | `FROM_WHITELIST` | Comma-separated list of whitelisted phone numbers for incoming requests. (Ex: `+1234567891,+13456789201`) If not set, all numbers will be able to prompt opencode. | None |
 | `TWILIO_AUTH_TOKEN` | Twilio Auth Token for webhook validation. If not set, webhooks will not be validated. | None |
