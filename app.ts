@@ -4,7 +4,7 @@ import log from "./log.ts";
 import message from "./message.ts";
 import voice from "./voice.ts";
 import health from "./health.ts";
-import listen from './listen.ts';
+import listen from "./listen.ts";
 
 const app = express();
 

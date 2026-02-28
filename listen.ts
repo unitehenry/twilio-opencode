@@ -1,6 +1,6 @@
 import log from "./log.ts";
 
-export default async () : Promise<void> => {
+export default async (): Promise<void> => {
   const opencodeBaseUrl = process.env.OPENCODE_BASE_URL;
 
   if (!opencodeBaseUrl) {
@@ -21,11 +21,11 @@ export default async () : Promise<void> => {
 
       process.exit(1);
     }
-  } catch(error) {
+  } catch (error) {
     log("ERROR", "Could not probe opencode", { error });
 
     process.exit(1);
   }
 
   log("INFO", "Server listening");
-}
+};
