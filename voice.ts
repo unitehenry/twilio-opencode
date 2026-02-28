@@ -8,7 +8,7 @@ const HOLD_MUSIC_URL =
   "http://com.twilio.sounds.music.s3.amazonaws.com/MARKOVICHAMP-Borghestral.mp3";
 
 function buildResponse(req: Request, message: string): string {
-  const origin = `${req.protocol}://${req.get('host')}`;
+  const origin = `${req.protocol}://${req.get("host")}`;
 
   return `<?xml version="1.0" encoding="UTF-8"?>
     <Response>
@@ -96,7 +96,7 @@ export default async (req: Request, res: Response): Promise<void> => {
   const response = buildResponse(req, text);
 
   if (!twilioAuthToken) {
-    log('INFO', 'No auth token, responding to webhook');
+    log("INFO", "No auth token, responding to webhook");
 
     res.set("Content-Type", "text/xml");
 
@@ -107,11 +107,11 @@ export default async (req: Request, res: Response): Promise<void> => {
 
   const accountSid: string = req.body.AccountSid;
 
-  log('INFO', 'Creating twilio client', { accountSid });
+  log("INFO", "Creating twilio client", { accountSid });
 
   const twilioClient = twilio(accountSid, twilioAuthToken);
 
-  log('INFO', 'Updating twilio call', { callSid });
+  log("INFO", "Updating twilio call", { callSid });
 
   await twilioClient.calls(callSid).update({ twiml: response });
 };
