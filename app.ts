@@ -4,6 +4,7 @@ import log from "./log.ts";
 import message from "./message.ts";
 import voice from "./voice.ts";
 import health from "./health.ts";
+import listen from './listen.ts';
 
 const app = express();
 
@@ -21,9 +22,7 @@ app.get("/health", health);
 
 const port: number = parseInt(process.env.PORT || "3000", 10);
 
-const server = app.listen(port, (): void =>
-  log("INFO", "Server started", { port }),
-);
+const server = app.listen(port, listen);
 
 process.on("SIGINT", () => {
   log("INFO", "Received SIGINT, shutting down gracefully");
