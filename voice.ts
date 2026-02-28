@@ -29,28 +29,36 @@ function respond(req: Request, res: Response, message: string): void {
   res.send(responseXml);
 }
 
-function hangup(res: Response, message: string = ""): void {
-  const responseXml = `<?xml version="1.0" encoding="UTF-8"?>
+function buildHangupXml(message: string) {
+  return `<?xml version="1.0" encoding="UTF-8"?>
       <Response>
         <Say>${message}</Say>
         <Hangup />
       </Response>
     `;
+}
+
+function hangup(res: Response, message: string = ""): void {
+  const hangupXml = buildHangupXml(message);
 
   res.set("Content-Type", "text/xml");
 
-  res.send(responseXml);
+  res.send(hangupXml);
+}
+
+function buildHoldXml(holdMusicUrl: string) {
+  return `<?xml version="1.0" encoding="UTF-8"?>
+    <Response>
+      <Play loop="0">${holdMusicUrl}</Play>
+    </Response>`;
 }
 
 function hold(res: Response): void {
-  const responseXml = `<?xml version="1.0" encoding="UTF-8"?>
-    <Response>
-      <Play loop="0">${HOLD_MUSIC_URL}</Play>
-    </Response>`;
+  const holdXml = buildHoldXml(HOLD_MUSIC_URL);
 
   res.set("Content-Type", "text/xml");
 
-  res.send(responseXml);
+  res.send(holdXml);
 }
 
 interface UpdateCallParams {
