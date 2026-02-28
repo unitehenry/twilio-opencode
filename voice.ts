@@ -7,10 +7,12 @@ import log from "./log.ts";
 const HOLD_MUSIC_URL =
   "http://com.twilio.sounds.music.s3.amazonaws.com/MARKOVICHAMP-Borghestral.mp3";
 
-function buildResponse(message: string): string {
+function buildResponse(req: Request, message: string): string {
+  const origin = `${req.protocol}://${req.get('host')}`;
+
   return `<?xml version="1.0" encoding="UTF-8"?>
     <Response>
-      <Gather input="speech" action="/voice" method="POST">
+      <Gather input="speech" action="${origin}/voice" method="POST">
         <Say>${message}</Say>
       </Gather>
     </Response>
@@ -33,7 +35,6 @@ function hangup(res: Response, message: string = ""): void {
 function hold(res: Response): void {
   const responseXml = `<?xml version="1.0" encoding="UTF-8"?>
     <Response>
-      <Say>Let me work on that for you...</Say>
       <Play loop="0">${HOLD_MUSIC_URL}</Play>
     </Response>`;
 
@@ -64,7 +65,7 @@ export default async (req: Request, res: Response): Promise<void> => {
   if (!speechResult) {
     log("INFO", "No speech result received");
 
-    const response = buildResponse("What can I do for you?");
+    const response = buildResponse(req, "What can I do for you?");
 
     res.set("Content-Type", "text/xml");
 
@@ -92,9 +93,11 @@ export default async (req: Request, res: Response): Promise<void> => {
 
   log("INFO", "Session cached", { callSid, sessionId });
 
-  const response = buildResponse(text);
+  const response = buildResponse(req, text);
 
   if (!twilioAuthToken) {
+    log('INFO', 'No auth token, responding to webhook');
+
     res.set("Content-Type", "text/xml");
 
     res.send(response);
@@ -104,7 +107,11 @@ export default async (req: Request, res: Response): Promise<void> => {
 
   const accountSid: string = req.body.AccountSid;
 
+  log('INFO', 'Creating twilio client', { accountSid });
+
   const twilioClient = twilio(accountSid, twilioAuthToken);
 
-  twilioClient.calls(callSid).update({ twiml: response });
+  log('INFO', 'Updating twilio call', { callSid });
+
+  await twilioClient.calls(callSid).update({ twiml: response });
 };
