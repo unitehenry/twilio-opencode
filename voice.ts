@@ -9,7 +9,7 @@ const DEFAULT_GREETING = "Hello";
 const HOLD_MUSIC_URL =
   "http://com.twilio.sounds.music.s3.amazonaws.com/MARKOVICHAMP-Borghestral.mp3";
 
-function buildResponseXml(req: Request, message : string) : string {
+function buildResponseXml(req: Request, message: string): string {
   const origin = `${req.protocol}://${req.get("host")}`;
 
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -61,7 +61,7 @@ interface UpdateCallParams {
   twilioAuthToken: string;
 }
 
-async function updateCall(params : UpdateCallParams): Promise<void> {
+async function updateCall(params: UpdateCallParams): Promise<void> {
   const twilioClient = twilio(params.accountSid, params.twilioAuthToken);
 
   const twiml = buildResponseXml(params.request, params.message);
@@ -138,6 +138,6 @@ export default async (req: Request, res: Response): Promise<void> => {
     callSid,
     twilioAuthToken,
     request: req,
-    message: text
+    message: text,
   });
 };
