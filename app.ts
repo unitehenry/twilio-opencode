@@ -3,6 +3,7 @@ import twilio from "twilio";
 import log from "./log.ts";
 import message from "./message.ts";
 import voice from "./voice.ts";
+import configure from "./configure.ts";
 import health from "./health.ts";
 import listen from "./listen.ts";
 
@@ -17,6 +18,8 @@ app.use(express.urlencoded({ extended: false }));
 app.post("/voice", twilio.webhook({ validate }), voice);
 
 app.post("/message", twilio.webhook({ validate }), message);
+
+app.post("/configure", configure);
 
 app.get("/health", health);
 
