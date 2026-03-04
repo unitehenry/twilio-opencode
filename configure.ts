@@ -16,7 +16,7 @@ export default async (req: Request, res: Response): Promise<void> => {
   const requestBody: ConfigureRequest = {
     twilioAccountSid: req.body.twilioAccountSid,
     twilioAuthToken: req.body.twilioAuthToken,
-    twilioPhoneNumberSid: req.body.twilioPhoneNumberSid
+    twilioPhoneNumberSid: req.body.twilioPhoneNumberSid,
   };
 
   log("INFO", "Init twilio client", {
@@ -25,15 +25,17 @@ export default async (req: Request, res: Response): Promise<void> => {
     origin,
   });
 
-  const client = twilio(requestBody.twilioAccountSid, requestBody.twilioAuthToken);
+  const client = twilio(
+    requestBody.twilioAccountSid,
+    requestBody.twilioAuthToken,
+  );
 
-  await client.incomingPhoneNumbers(requestBody.twilioPhoneNumberSid)
-    .update({
-      smsUrl: origin + '/message',
-      smsMethod: 'POST',
-      voiceUrl: origin + '/voice',
-      voiceMethod: 'POST'
-    });
+  await client.incomingPhoneNumbers(requestBody.twilioPhoneNumberSid).update({
+    smsUrl: origin + "/message",
+    smsMethod: "POST",
+    voiceUrl: origin + "/voice",
+    voiceMethod: "POST",
+  });
 
   res.sendStatus(200);
-}
+};
