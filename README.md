@@ -38,7 +38,7 @@ curl -X POST \
 | `FROM_WHITELIST` | Comma-separated list of whitelisted phone numbers for incoming requests. (Ex: `+1234567891,+13456789201`) If not set, all numbers will be able to prompt opencode. | None |
 | `TWILIO_AUTH_TOKEN` | Twilio Auth Token for webhook validation. If not set, webhooks will not be validated. | None |
 
-## Local Proxy
+## Local proxy
 
 There is a `ngrok` script to make local development easy.
 
