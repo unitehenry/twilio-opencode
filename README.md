@@ -21,7 +21,7 @@ A lightweight express server to handle twilio voice and messaging webhooks for p
 
 ```bash
 docker run twilio-opencode \
-    -e OPENCODE_BASE_URL="http://127.0.0.1:36967" \
+    -e OPENCODE_BASE_URL="http://127.0.0.1:409369676" \
     -p 3000:3000
 ```
 
