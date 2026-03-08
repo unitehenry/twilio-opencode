@@ -18,7 +18,7 @@ docker run twilio-opencode \
 
 ### Configure twilio
 
-Use the `/configure` endpoint to programatically update Twilio phone number settings.
+Use the `/configure` endpoint to programatically update twilio phone number settings.
 
 ```bash
 TWILIO_ACCOUNT_SID="ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
